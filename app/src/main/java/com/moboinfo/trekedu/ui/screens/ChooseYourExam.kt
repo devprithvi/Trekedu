@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -18,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -27,11 +29,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.moboinfo.trekedu.R
+import com.moboinfo.trekedu.ui.theme.blackColor
 import com.moboinfo.trekedu.ui.theme.borderColor
 import com.moboinfo.trekedu.ui.theme.purpleMain
 
@@ -53,7 +57,7 @@ fun ChooseYourExamScrn(modifier: Modifier) {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (image, tv1, selectExam, etSelectedExam, proceedBtn) = createRefs()
+        val (image, tv1, selectExamChips, etSelectedExam, proceedBtn) = createRefs()
 
         Image(
             painter = painterResource(id = R.drawable.laptop_with_trics),
@@ -80,6 +84,46 @@ fun ChooseYourExamScrn(modifier: Modifier) {
             fontFamily = FontFamily(Font(R.font.gil_bold)),
             fontSize = 15.sp)
 
+        ChipList(
+            modifier.constrainAs(selectExamChips) {
+                start.linkTo(parent.start, 20.dp)
+                top.linkTo(image.bottom, 30.dp)
+            }, list = listOf(
+                "UPSC", "NEET",
+                "JEE/MAINS/ADVANCE",
+                "CAT", "IELTS",
+                "IBPS CLERK","CDS",
+                "NDA","RRB"
+            ), emptySet()
+        )
+
+        Button(onClick = {
+        },
+            shape = RoundedCornerShape(62),
+            modifier = Modifier
+                .constrainAs(proceedBtn) {
+                    start.linkTo(parent.start, 20.dp)
+                    end.linkTo(parent.end, 20.dp)
+                    bottom.linkTo(parent.bottom, 30.dp)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = (
+                        purpleMain
+                        )
+            )) {
+            Text(
+                text = "Proceed",
+//                            style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+            )
+        }
+
+
+
 
     }
 }
@@ -87,24 +131,20 @@ fun ChooseYourExamScrn(modifier: Modifier) {
 @Preview
 @Composable
 fun PreviewChip() {
-    ChipList(list = listOf("UPSC", "SBI","IELTS"), emptySet())
+    ChipList(Modifier, list = listOf("UPSC", "SBI", "IELTS"), emptySet())
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChipList(list: List<String>, temp: Set<Int>) {
+fun ChipList(modifier: Modifier, list: List<String>, temp: Set<Int>) {
 
     var multipleChecked by rememberSaveable {
         mutableStateOf(temp)
     }
     com.google.accompanist.flowlayout.FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        crossAxisSpacing = 16.dp,
-        mainAxisSpacing = 16.dp
+        modifier.fillMaxSize(),
+        crossAxisSpacing = 20.dp,
+        mainAxisSpacing = 20.dp
     ) {
         list.forEachIndexed { index, s ->
             FilterChip(
@@ -116,7 +156,12 @@ fun ChipList(list: List<String>, temp: Set<Int>) {
 //                    selected = !selected
                 },
                 label = {
-                    Text(s)
+                    Text(
+                        s,
+                        fontFamily = FontFamily(Font(R.font.gil_bold)),
+                        fontSize = 15.sp,
+                        color = blackColor
+                    )
                 },
                 selected = multipleChecked.contains(index),
                 leadingIcon = if (multipleChecked.contains(index)) {
