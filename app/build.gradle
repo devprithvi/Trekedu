@@ -72,6 +72,7 @@ dependencies {
 
     // sdp
 //    implementation 'com.github.Kaaveh:sdp-compose:1.1.0'
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
     // Retrofit

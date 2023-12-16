@@ -44,7 +44,7 @@ fun LoadingPage() {
                     top.linkTo(parent.top, 50.dp)
                 }
                 .clickable {
-
+    
                 }
                 .fillMaxWidth(),
             color = Color.Black,
